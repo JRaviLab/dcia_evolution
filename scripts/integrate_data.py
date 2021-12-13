@@ -4,7 +4,7 @@ out_file_ipr = open("../data/DciA_combined_ipr.tsv", "a")
 out_file_seqs = open("/data/scratch/janani/molevolvr_out/Dciacb_full/Dciacb.fa", "a")
 with open("../data/DciA_codes.csv", "r") as infile:
     infile.readline()
-    for i in range(21):
+    for i in range(22):
         line = infile.readline()
         line = line.rstrip().split(",")
         code = line[1]
@@ -39,3 +39,7 @@ with open("../data/DciA_codes.csv", "r") as infile:
         else:
             os.system("cp /data/scratch/janani/molevolvr_out/{}_full/cln_combined.tsv ../data/{}_bysp_cln_combined.tsv".format(code, code))
             os.system("cp /data/scratch/janani/molevolvr_out/{}_full/ipr_combined.tsv ../data/{}_bysp_ipr_combined.tsv".format(code, code))
+
+out_file_ipr.close()
+out_file_cln.close()
+out_file_seqs.close()
