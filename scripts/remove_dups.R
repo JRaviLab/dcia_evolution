@@ -1,5 +1,5 @@
 library(tidyverse)
-df <- read_tsv("/data/scratch/janani/molevolvr_out/DnaBcm_full/cln_combined.tsv")
+df <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined.tsv")
 cp_df <- df
 for (row in 1:nrow(df)){
     row <- df[row,]
@@ -15,5 +15,5 @@ for (row in 1:nrow(df)){
         print("passed")
     }
 }
-cp_df <- subset(cp_df, cp_df$QueryName != "Mycobacterium_DciA")
-write_tsv(cp_df, "/data/scratch/janani/molevolvr_out/DnaBcm_full/cln_no_dupes_combined.tsv")
+
+write_tsv(cp_df, "/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined_no_dupes.tsv")

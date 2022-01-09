@@ -19,15 +19,16 @@ source("/data/research/jravilab/molevolvr_app/scripts/MolEvolData_class.R")
 source("/data/research/jravilab/molevolvr_app/scripts/ui/tabText.R")
 source("/data/research/jravilab/molevolvr_app/scripts/utility.R")
 
-df <- read_tsv("/data/scratch/janani/molevolvr_out/DciAcm_full/cln_combined.tsv")
-in_ipr <- read_tsv("/data/scratch/janani/molevolvr_out/DciAcm_full/ipr_combined.tsv")
+df <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined.tsv")
+in_ipr <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/ipr_combined.tsv")
 
 rep_fasta_path = tempfile()
-top_acc <- find_top_acc(infile_full="/data/scratch/janani/molevolvr_out/DciAcm_full/cln_combined.tsv",
-                          DA_col = "DomArch.Pfam",
-                          ## @SAM, you could pick by the Analysis w/ max rows!
-                          lin_col = "Lineage",
-                          n = 20)
+top_acc <- find_top_acc(infile_full="/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined.tsv",
+                         DA_col = "DomArch.Pfam",
+                        ## @SAM, you could pick by the Analysis w/ max rows!
+                         lin_col = "Lineage",
+                         n = 22)  
+#top_acc <- df$AccNum
 acc2fa(top_acc, outpath = rep_fasta_path, "sequential")
 rename_fasta(rep_fasta_path, rep_fasta_path, replacement_function=map_acc2name,
                  acc2name = select(df,"AccNum","Name"))
@@ -39,9 +40,9 @@ tree <- seq_tree(rep_msa_path)
 #ipr_out_sub <- ipr_out_sub %>% distinct(Name, .keep_all = TRUE)
 #  ipr_out_sub <- subset(ipr_out_sub, select = -c(Label))
 #ipr_out_sub$label <- paste0(" ", ipr_out_sub$Name)
-ipr_plot <- ipr2viz("/data/scratch/janani/molevolvr_out/DciAcm_full/ipr_combined.tsv","/data/scratch/janani/molevolvr_out/DciAcm_full/cln_combined.tsv",
-analysis = c("Pfam", "MobiDBLite", "Gene3D"))
+ipr_plot <- ipr2viz("/data/scratch/janani/molevolvr_out/GZKL61_full/ipr_combined.tsv","/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined.tsv",
+analysis = c("Pfam", "MobiDBLite"), text_size = 12, topn = 22)
 
 last_plot <- ipr_plot %>% insert_right(tree)
 
-ggsave("plot.png", last_plot, dpi = 400, device = "png", height = 18, width = 20)
+ggsave("plot.png", last_plot, dpi = 400, device = "png", height = 11, width = 14)
