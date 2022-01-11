@@ -6,15 +6,8 @@ library(stringr)
 df <- read_tsv("/data/scratch/janani/molevolvr_out/RlSBhA_phylo/cln_combined.tsv")
 df2 <- read_tsv("helen_table.tsv")
 df <- merge(df, df2, by="AccNum", all.x=TRUE)
-<<<<<<< HEAD
 df <- df %>% subset( select = c(Name, AccNum, Species, TaxID, Lineage, DomArch.Pfam, DomArch.MobiDBLite,
-Length,DUF721_range, Group, Gram_stain
-=======
-df <- df %>% subset( select = c(AccNum, Species, TaxID, Lineage, Name,
-																DomArch.Pfam, DomArch.MobiDBLite,
-																Length, DUF721_range, Group, Gram_stain
->>>>>>> 1efde91ea86af3ae6b495a3ec37227c6fc753fcb
-))
+Length,DUF721_range, Group, Gram_stain))
 df <- df %>% mutate(Species = if_else(Name == "BSpiroc_Linterrogans_WP_000650726.1", "Leptospira interrogans", Species))
 df <- df %>% mutate(Species = if_else(Name == "BProteo_Babortus_WP_002963653.1", "Brucella abortus", Species))
 df <- df %>% mutate(Species = if_else(Name == "BProteo_Paeruginosa_WP_003120896.1", "Pseudomonas aeruginosa", Species))
