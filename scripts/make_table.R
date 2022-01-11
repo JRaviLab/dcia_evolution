@@ -2,10 +2,11 @@ library(gt)
 library(here)
 library(tidyverse)
 library(paletteer)
+library(stringr)
 df <- read_tsv("/data/scratch/janani/molevolvr_out/RlSBhA_phylo/cln_combined.tsv")
-df2 <- read_tsv("Helen_table.tsv")
+df2 <- read_tsv("helen_table.tsv")
 df <- merge(df, df2, by="AccNum", all.x=TRUE)
-df <- df %>% subset( select = c(Name, Species, TaxID, Lineage, DomArch.Pfam, DomArch.MobiDBLite,
+df <- df %>% subset( select = c(Name, AccNum, Species, TaxID, Lineage, DomArch.Pfam, DomArch.MobiDBLite,
 Length,DUF721_range, Group, Gram_stain
 ))
 df <- df %>% mutate(Species = if_else(Name == "BSpiroc_Linterrogans_WP_000650726.1", "Leptospira interrogans", Species))
@@ -17,6 +18,12 @@ df <- df %>% mutate(Species = if_else(Name == "BActino_Rjostii_WP_009476748.1", 
 df <- df %>% mutate(Species = if_else(Name == "BActino_Savermiltilis_WP_010985745.1", "Streptomyces avermiltilis", Species))
 df <- df %>% mutate(Species = if_else(Name == "BProteo_Maustralicum_WP_015318768.1", "Mesorhizobium australicum", Species))
 df <- df[!duplicated(df$Name), ]
+df$DomArch.MobiDBLite <- str_replace_all(df$DomArch.MobiDBLite, "consensus disorder prediction", "disorder region")
+df$DUF721_range <- str_replace_all(df$DUF721_range, "aa", "")
+df$DUF721_range <- str_replace_all(df$DUF721_range, "AA", "")
+df$DUF721_range <- str_replace_all(df$DUF721_range, "-", "–")
+df$Gram_stain <- str_replace_all(df$Gram_stain, "n/a", "NA")
+df$Gram_stain <- str_replace_all(df$Gram_stain, "-", "–")
 table <- df %>%
   gt() %>%
   cols_label(Gram_stain = "Gram stain", DUF721_range = "DUF721 range (aa)", Group = "DciA group") %>%

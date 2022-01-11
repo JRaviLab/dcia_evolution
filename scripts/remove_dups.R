@@ -1,5 +1,6 @@
 library(tidyverse)
-df <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined.tsv")
+df <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined_original.tsv")
+df <- distinct(df)
 cp_df <- df
 for (row in 1:nrow(df)){
     row <- df[row,]

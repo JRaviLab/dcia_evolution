@@ -1,5 +1,5 @@
 library(tidyverse)
-df <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined.tsv")
+df <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/cln_combined_no_dupes.tsv")
 in_ipr <- read_tsv("/data/scratch/janani/molevolvr_out/GZKL61_full/ipr_combined.tsv")
 # This block should be QueryName for full analysis
 df <- df %>% mutate(QueryName = if_else(QueryName == "BSpiroc_L_WP_000650726.1", "BSpiroc_Linterrogans_WP_000650726.1", QueryName))
