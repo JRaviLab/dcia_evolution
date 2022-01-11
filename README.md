@@ -1,7 +1,9 @@
 # DciA helicase operators exhibit diversity across bacterial phyla
-Helen C. Blaine<sup>1</sup>\*, Joseph T. Burke<sup>2</sup>\*, Janani Ravi<sup>2,#</sup>, and Christina L. Stallings<sup>1,#</sup>
-<sup>1</sup>Department of Molecular Microbiology, Washington University School of Medicine, Saint Louis, Missouri 63110, USA
+Helen C. Blaine<sup>1,</sup>\*, Joseph T. Burke<sup>2,</sup>\*, Janani Ravi<sup>2,#</sup>, and Christina L. Stallings<sup>1,#</sup>
+
+<sup>1</sup>Department of Molecular Microbiology, Washington University School of Medicine, Saint Louis, Missouri 63110, USA <br>
 <sup>2</sup>Departments of Pathobiology and Diagnostic Investigation, Microbiology and Molecular Genetics, Michigan State University, East Lansing, Michigan 48824, USA.
+
 \*Contributed equally.
 <sup>#</sup>Correspondence to stallings@wustl.edu and janani@msu.edu.
 
