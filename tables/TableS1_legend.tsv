@@ -1,0 +1,27 @@
+Columns_for_TableS1	Notes_explanation
+Name	Name of the protein with lineage, species, accession info e.g., Bacteria>Actinobacteria M. tuberculosis A0A0E7X019 would translate to 'BActino_Mtuberculosis_A0A0E7X019'
+UniProt.AccNum	UniProt accession number from InterPro Pfam database
+NCBI.AccNum	Corresponding NCBI accession number
+Species	Species name (from NCBI; using MolEvolvR)
+TaxID	Taxonomic identifier (NCBI; using MolEvolvR)
+Lineage	Lineage generated from NCBI TaxDump (using MolEvolvR); Kingdom, Phylum
+DomArch.Pfam	Domain architecture created using Pfam profile searches (using MolEvolvR)
+DomArch.MobiDBLite	Domain architecture created using Pfam profile searches (using MolEvolvR)
+DciA.Start	Starting position of DciA domain (from Pfam profile match)
+DciA.Stop	End (stopping) position of DciA domain (from Pfam profile match)
+Seq.Length	Length of protein
+IDR.Start	Starting position of IDR (from MobiDBLite prediction)
+IDR.Stop	End (stopping) position of IDR (from MobiDBLite prediction)
+DciA.Nterm.dist	Number of amino acid residues from the start of the protein to the start of the DciA domain
+DciA.Cterm.dist	Number of amino acid residues from the end of the protein to the end of the DciA domain
+Group	Group nomenclature based on N-/C-terminal extension lengths and the relative position of the DciA domain
+DomArch.PANTHER	Domain architecture created using PANTHER profile searches (using MolEvolvR)
+DomArch.SMART	Domain architecture created using SMART profile searches (using MolEvolvR)
+DomArch.Phobius	Domain architecture created using Phobius prediction algorithm for cellular localization (using MolEvolvR)
+DomArch.Gene3D	Domain architecture created using Gene3D (CATH) profile searches (using MolEvolvR)
+DomArch.TMHMM	Domain architecture created using TMHMM prediction algorithm for transmembrane regions (using MolEvolvR)
+DomArch.SignalP_GRAM_POSITIVE	Domain architecture created using SignalP prediction algorithm for signal peptides (using MolEvolvR)
+DomArch.SUPERFAMILY	Domain architecture created using SUPERFAMILY profile searches (using MolEvolvR)
+DomArch.TIGRFAM	Domain architecture created using TIGRFAM profile searches (using MolEvolvR)
+Lineage_short	Lineage generated from NCBI TaxDump (using MolEvolvR); Kingdom, Phylum, Class
+Title	Annotation of protein (NCBI)
