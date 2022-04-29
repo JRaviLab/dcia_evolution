@@ -68,7 +68,7 @@ in_ipr_bact$ShortName <- str_replace_all(in_ipr_bact$ShortName, "Hydrolase", "HA
 domarch <- ipr2viz_web2(infile_ipr = in_ipr_bact, accessions = df_unique$Name,
               analysis = c("Domarch"), group_by = "Analysis", text_size = 16)
 ggsave("dcia_figs/fig1/1C_slim.png", domarch, dpi = 400, device = "png", height = 12, width = 10)   
-ggsave("dcia_figs/fig1/1C_full.png", domarch, dpi = 400, device = "png", height = 12, width = 15)
+ggsave("dcia_figs/fig1/1C_full.png", domarch, dpi = 400, device = "png", height = 12, width = 20)
 #Figure S1A Domarch of 2 euk reps
 df_euks <- df %>% filter(AccNum == "KAF6150485.1" | AccNum == "PMD57303.1")
 write_tsv(df_euks, "dcia_figs/figS1/table.tsv")
@@ -80,12 +80,12 @@ ggsave("dcia_figs/figS1/S1A.png", domarch, dpi = 400, device = "png", height = 4
 df_others <- df %>% filter(!grepl("Bacteria", Lineage))
 write_tsv(df_others, "dcia_figs/T1/table.tsv")
 # Supplemental figure 2a -> sunburst of starting points 
-df <- read_tsv("/data/scratch/janani/molevolvr_out/v134LF_full/cln_combined.tsv")
+df <- read_tsv("/data/scratch/janani/molevolvr_out/v134LF_full/cln_combined_original.tsv")
 ipr <- read_tsv("/data/scratch/janani/molevolvr_out/v134LF_full/ipr_combined.tsv")
 df <- df %>% filter(grepl("DciA", DomArch.Pfam))%>% filter(grepl("Bacteria>", Lineage)) %>% filter(!grepl("Candidatus", Lineage)) %>% arrange(desc(PcPositive)) %>% distinct(AccNum, .keep_all = TRUE)
 ipr <- ipr %>% filter(ipr$AccNum %in% df$AccNum)
-fwrite(df, "/data/scratch/janani/molevolvr_out/v134LF_full/cln_combined_filtered.tsv", sep = "\t", quote = FALSE)
-fwrite(ipr,"/data/scratch/janani/molevolvr_out/v134LF_full/ipr_combined_filtered.tsv", sep = "\t", quote = FALSE)
+fwrite(df, "/data/scratch/janani/molevolvr_out/v134LF_full/cln_combined.tsv", sep = "\t", quote = FALSE)
+fwrite(ipr,"/data/scratch/janani/molevolvr_out/v134LF_full/ipr_combined.tsv", sep = "\t", quote = FALSE)
 #  S2B Domarch heatmap of molevolvr homologs
 df <- df %>% mutate(DomArch.Pfam = gsub("_[0-9]{1,2}", "", DomArch.Pfam)) %>% mutate(DomArch.Pfam = str_replace(DomArch.Pfam, "TPR\\+.*", paste0("TPR(", str_count(DomArch.Pfam, "TPR"), ")"))) %>%
 mutate(DomArch.Pfam = str_replace(DomArch.Pfam, "DciA\\+DciA", "DciA(2)"))%>% mutate(DomArch.Pfam = str_replace(DomArch.Pfam, "DUF2726\\+DciA", "TPR(1)+DUF2726+DciA"))
@@ -120,12 +120,13 @@ df_fig2 <- df %>% filter(DomArch.Pfam == "DciA")%>% filter(grepl("Bacteria>", Li
 df_fig2$domainLength <- df_fig2$pfam_stop - df_fig2$pfam_start
 df_fig2$fromStart <- df_fig2$pfam_start
 df_fig2$fromEnd <- df_fig2$seq_length - df_fig2$pfam_stop
-df_fig2 <- df_fig2 %>% pivot_longer(c(domainLength, fromStart, fromEnd), names_to = "Type", values_to = "length")
-df_fig2$Type <- factor(df_fig2$Type, levels = c("domainLength", "fromStart", "fromEnd"))
+df_fig2$seqLength <- df_fig2$seq_length
+df_fig2 <- df_fig2 %>% pivot_longer(c(seqLength, fromStart, fromEnd), names_to = "Type", values_to = "length")
+df_fig2$Type <- factor(df_fig2$Type, levels = c("seqLength", "fromStart", "fromEnd"))
+df_fig2_stats <- df_fig2 %>% group_by(Type) %>% mutate(med = median(length), twent = quantile(length, c(0.25)), sev = quantile(length, c(0.75)))
 fig_2a <- ggplot(df_fig2, aes(x=Lineage, length)) + 
-  geom_hline(yintercept = median(df_fig2$length), color = "blue") + geom_hline(yintercept = quantile(df_fig2$length, c(0.25)), color = "blue", alpha = 0.5) + geom_hline(yintercept = quantile(df_fig2$length, 0.75), color = "blue", alpha = 0.5) +
-  geom_boxplot(outlier.alpha = 0.5, outlier.color = "black") + labs(y = "Length", x = "Lineage") + theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.8, hjust=1),panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), axis.ticks = element_line(colour = "black"), plot.background = element_rect("white", size = 0), text = element_text(size = 18), panel.border = element_blank())
-fig_2a <- fig_2a + facet_grid(Type ~ . , scales = "free")
+  geom_boxplot(outlier.alpha = 0.5, outlier.color = "black") + labs(y = "Length", x = "Lineage") + theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.8, hjust=1),panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), axis.ticks = element_line(colour = "black"), plot.background = element_rect("white", size = 0), text = element_text(size = 18), panel.border = element_blank())+
+  facet_grid(Type ~ . , scales = "free") +  geom_hline(data = df_fig2_stats, aes(yintercept = med), color = "blue") + geom_hline(data = df_fig2_stats, aes(yintercept = twent), color = "blue", alpha = 0.5) + geom_hline(data = df_fig2_stats, aes(yintercept = df_fig2_stats$sev), color = "blue", alpha = 0.5)
 ggsave("dcia_figs/fig2/2a.png", fig_2a, dpi = 400, device = "png", height = 14, width = 16)
 # Fig 3a Mobidb heatmap on only bacteria
 Lineage_domarch <- lineage.DA.plot2(df_bact, colname = "DomArch.MobiDBLite", cutoff = 100, RowsCutoff = F, text_size = 12)
@@ -137,10 +138,11 @@ df_fig3$fromStart <- df_fig3$mobi_start
 df_fig3$fromEnd <- df_fig3$seq_length - df_fig3$mobi_stop
 df_fig3 <- df_fig3 %>% pivot_longer(c(domainLength, fromStart, fromEnd), names_to = "Type", values_to = "length")
 df_fig3$Type <- factor(df_fig3$Type, levels = c("domainLength", "fromStart", "fromEnd"))
+df_fig3_stats <- df_fig3 %>% group_by(Type) %>% mutate(med = median(length), twent = quantile(length, c(0.25)), sev = quantile(length, c(0.75)))
+
 b <- ggplot(df_fig3, aes(x=Lineage, length)) + 
-  geom_hline(yintercept = median(df_fig3$length), color = "blue") + geom_hline(yintercept = quantile(df_fig3$length, c(0.25)), color = "blue", alpha = 0.5) + geom_hline(yintercept = quantile(df_fig3$length, 0.75), color = "blue", alpha = 0.5) +
-  geom_boxplot(outlier.alpha = 0.5, outlier.color = "black") + labs(y = "Length", x = "Lineage") + theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.8, hjust=1),panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), axis.ticks = element_line(colour = "black"), plot.background = element_rect("white", size = 0) ,text = element_text(size = 18), panel.border = element_blank())
-b <- b + facet_grid(Type ~ . , scales = "free")
+  geom_boxplot(outlier.alpha = 0.5, outlier.color = "black") + labs(y = "Length", x = "Lineage") + theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.8, hjust=1),panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), axis.ticks = element_line(colour = "black"), plot.background = element_rect("white", size = 0) ,text = element_text(size = 18), panel.border = element_blank())+ 
+  facet_grid(Type ~ . , scales = "free") + geom_hline(data = df_fig3_stats, aes(yintercept = med), color = "blue") + geom_hline(data = df_fig3_stats, aes(yintercept = twent), color = "blue", alpha = 0.5) + geom_hline(data = df_fig3_stats, aes(yintercept = sev), color = "blue", alpha = 0.5)
 ggsave("dcia_figs/fig3/3_facet.png", b, dpi = 400, device = "png", height = 14, width = 16)
 
 # fig 3e group by mobidb, lineage, select representative, run MSA
